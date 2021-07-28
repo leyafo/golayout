@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+#  api:
+#    image: zeroone/opsnft:1.0.1
+#    container_name: api
+#    ports:  #it doesn't need to export the port on 'host' network_mode
+#      - "9527:9527"
+#    volumes:
+#      - ./log:/opt/ops/log
+#    restart: "no"
+#    command: "api -f conf/api.yaml"
+#    networks:
+#      - consul_consul
+  #    network_mode: host
