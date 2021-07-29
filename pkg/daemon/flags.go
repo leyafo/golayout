@@ -10,20 +10,16 @@ type Flags struct{
 	flags *pflag.FlagSet
 }
 
-func NewCmdFlags()*Flags{
+
+func ParseFlags()(*Flags, error){
 	opt := &Flags{
 		flags: pflag.NewFlagSet(os.Args[0], pflag.ContinueOnError),
 	}
 
 	opt.flags.StringVarP(&opt.ConfigFile, "config", "f", "", "load the config file name")
-
-	return opt
-}
-
-func (f *Flags)Parse()(error){
-	err := f.flags.Parse(os.Args[1:])
+	err := opt.flags.Parse(os.Args[1:])
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return opt, nil
 }

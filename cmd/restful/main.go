@@ -13,8 +13,7 @@ import (
 )
 
 func main() {
-	flags := daemon.NewCmdFlags()
-	err := flags.Parse()
+	flags, err := daemon.ParseFlags()
 	if err != nil{
 		panic(err.Error())
 	}
@@ -25,11 +24,7 @@ func main() {
 		panic(err.Error())
 	}
 
-	logOpt, err := logger.NewDefaultOption(apiOpt.Log.Debug, apiOpt.Log.Path)
-	if err != nil{
-		panic(err)
-	}
-	err = logger.InitLog(logOpt)
+	err = logger.InitLog(logger.NewDefaultOption(apiOpt.Log.Debug, apiOpt.Log.Path))
 	if err != nil{
 		panic(err)
 	}

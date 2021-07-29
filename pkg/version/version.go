@@ -2,6 +2,7 @@ package version
 
 import (
 	"fmt"
+	"golayout/pkg/time"
 )
 
 var (
@@ -19,6 +20,7 @@ var (
 	API   = "v1"
 
 	Version Ver
+	startTime = time.Now()
 )
 
 type Ver struct {
@@ -28,6 +30,7 @@ type Ver struct {
 	ServiceName string `json:"service_name"`
 	BuildTime string `json:"build_time"`
 	API string `json:"api"`
+	RunningTime string `json:"running_time"`
 }
 
 func init(){
@@ -45,4 +48,14 @@ func Short()string{
 }
 func Long()string{
 	return fmt.Sprintf("%+v", Version)
+}
+
+func GetVersion()*Ver{
+	Version.RunningTime = time.Since(startTime).String()
+	return &Version
+}
+
+func (v *Ver)RpcVersion(in struct{}, out *Ver)error{
+	out = GetVersion()
+	return nil
 }

@@ -7,6 +7,10 @@ import (
 )
 
 func Version(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(version.Version)
+	var versions []*version.Ver
+	versions = append(versions, version.GetVersion())
+
+
+	json.NewEncoder(w).Encode(versions)
 	w.WriteHeader(http.StatusOK)
 }

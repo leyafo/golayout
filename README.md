@@ -1,8 +1,8 @@
 # golayout
-=======
-# A practical Golang project layout
+A practical Golang project layout
 
 ## The tree of file directory
+```go
 ├── bin             //store executable file     
 ├── cmd             //the number of binaries you want to build.    
 ├── conf            //project configuration, should be ignored by git.  
@@ -13,3 +13,4 @@
 ├── README.md   
 ├── scripts         //some shell scripts  
 └── internal
+```

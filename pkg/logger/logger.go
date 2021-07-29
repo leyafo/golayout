@@ -1,4 +1,3 @@
-
 package logger
 
 import (
@@ -17,7 +16,8 @@ type Options struct{
 	*zap.Config
 }
 
-func NewDefaultOption(debug bool, logPath string)(*Options, error){
+//NewDefaultOption initialize the log options, the logPath's directory must create before use it.
+func NewDefaultOption(debug bool, logPath string) *Options {
 	var logPaths []string
 	if logPath == ""{ //log to stdout
 		logPaths = append(logPaths, "stdout")
@@ -52,9 +52,10 @@ func NewDefaultOption(debug bool, logPath string)(*Options, error){
 		EncodeDuration: zapcore.StringDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
-	return opt, nil
+	return opt
 }
 
+//InitLog initialize the log module
 func InitLog(opts *Options)(err error){
 	zapLogger, err = opts.Build()
 	if err != nil{

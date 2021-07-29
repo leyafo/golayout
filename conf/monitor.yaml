@@ -1,0 +1,8 @@
+
+log:
+  path: log/monitor.log
+  debug: true
+
+server:
+  listen:
+  port: 9528

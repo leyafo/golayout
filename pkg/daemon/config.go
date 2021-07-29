@@ -30,3 +30,10 @@ type ApiOption struct{
 	Log Log
 	Server Server
 }
+
+type MonitorOption struct{
+	Log Log
+	Server Server
+
+	DiscoveringAddr string
+}
