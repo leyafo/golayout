@@ -29,6 +29,8 @@ type Server struct{
 type ApiOption struct{
 	Log Log
 	Server Server
+
+	DiscoveringAddr string
 }
 
 type MonitorOption struct{
