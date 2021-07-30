@@ -1,4 +1,4 @@
-.PHONY: build
+.PHONY: build proto
 
 SHELL:=/bin/sh
 PROJECT_NAME := golayout
@@ -26,6 +26,9 @@ endif
 # Build Flags
 GO_LD_FLAGS= "-s -w -X ${PROJECT_NAME}/pkg/version.RELEASE=${RELEASE} -X ${PROJECT_NAME}/pkg/version.COMMIT=${GIT_COMMIT} -X ${PROJECT_NAME}/pkg/version.REPO=${GIT_REPO_INFO} -X ${PROJECT_NAME}/pkg/version.BUILDTIME=${DATETIME} -X ${PROJECT_NAME}/pkg/version.SERVICENAME=$@"
 CGO_SWITCH := 0
+
+proto:
+	${MKFILE_DIR}bin/buf generate
 
 build: restful
 
