@@ -26,16 +26,20 @@ type Server struct{
 	Port int
 }
 
+type EtcdOption struct{
+	Endpoints []string
+	EndpointsKey string
+}
+
 type ApiOption struct{
 	Log Log
 	Server Server
 
-	DiscoveringAddr string
+	Etcd EtcdOption
 }
 
 type MonitorOption struct{
 	Log Log
 	Server Server
-
-	DiscoveringAddr string
+	Etcd EtcdOption
 }

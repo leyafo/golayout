@@ -31,11 +31,13 @@ func NewDefaultOption(debug bool, logPath string) *Options {
 		EncoderConfig: zap.NewProductionEncoderConfig(),
 		OutputPaths: logPaths,
 	}
+	l := zap.NewAtomicLevel()
 	if debug == true{
-		l := zap.NewAtomicLevel()
 		l.SetLevel(zapcore.DebugLevel)
-		opt.Level = l
+	}else{
+		l.SetLevel(zapcore.InfoLevel)
 	}
+	opt.Level = l
 
 	opt.EncoderConfig = zapcore.EncoderConfig{
 		TimeKey:        "time",
