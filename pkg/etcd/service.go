@@ -31,12 +31,12 @@ func InitEtcd(etcdConfig clientv3.Config)error{
 }
 
 //ServiceAdd add a endpoint service
-func ServiceAdd(endpointKey, addr string) error {
-		em, err := endpoints.NewManager(etcdClientV3, endpointKey)
+func ServiceAdd(endpointsKey, addr string) error {
+		em, err := endpoints.NewManager(etcdClientV3, endpointsKey)
 		if err != nil{
 			return err
 		}
-		return em.AddEndpoint(etcdClientV3.Ctx(), endpointKey+"/"+addr, endpoints.Endpoint{Addr: addr});
+		return em.AddEndpoint(etcdClientV3.Ctx(), endpointsKey+"/"+addr, endpoints.Endpoint{Addr: addr});
 }
 
 //ServiceList list registered services
@@ -60,30 +60,31 @@ func ServiceList(endpointsKey string)([]string, error){
 
 
 //ServiceAddWithLease add a endpoint service with lease
-func ServiceAddWithLease(c *clientv3.Client, lid clientv3.LeaseID, service, addr string) error {
-	em, err := endpoints.NewManager(c, service)
+func ServiceAddWithLease(lid clientv3.LeaseID, endpointsKey, addr string) error {
+	em, err := endpoints.NewManager(etcdClientV3, endpointsKey)
 	if err != nil{
 		return err
 	}
-	return em.AddEndpoint(c.Ctx(), service+"/"+addr, endpoints.Endpoint{Addr:addr}, clientv3.WithLease(lid));
+	return em.AddEndpoint(etcdClientV3.Ctx(), endpointsKey+"/"+addr, endpoints.Endpoint{Addr: addr}, clientv3.WithLease(lid));
 }
 
 //ServiceDelete delete a service
-func ServiceDelete(service, addr string) error {
-	em, err := endpoints.NewManager(etcdClientV3, service)
+func ServiceDelete(endpointsKey, addr string) error {
+	em, err := endpoints.NewManager(etcdClientV3, endpointsKey)
 	if err != nil{
 		return err
 	}
-	return em.DeleteEndpoint(etcdClientV3.Ctx(), service+"/"+addr)
+	return em.DeleteEndpoint(etcdClientV3.Ctx(), endpointsKey+"/"+addr)
 }
 
-//DialGrpc dial an RPC service using the etcd gRPC resolver and a gRPC Balancer:
-func DialGrpc(endpointKey string) (*grpc.ClientConn, error) {
-	etcdResolver, err := resolver.NewBuilder(etcdClientV3);
+//DialGrpc dial an RPC service using the etcd gRPC resolver and balancer:
+func DialGrpc(endpointsKey, serviceName string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
+	etcdResolver, err := resolver.NewBuilder(etcdClientV3)
 	if err != nil{
 		return nil, err
 	}
-	return  grpc.Dial("etcd:///" + endpointKey, grpc.WithResolvers(etcdResolver))
+	opts = append(opts, grpc.WithResolvers(etcdResolver))
+	return  grpc.Dial("etcd:///" +endpointsKey + "/"+ serviceName, opts...)
 }
 
 

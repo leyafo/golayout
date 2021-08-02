@@ -1,14 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-
+	clientv3 "go.etcd.io/etcd/client/v3"
 	"golayout/internal/api"
 	"golayout/pkg/daemon"
+	"golayout/pkg/etcd"
+	httpServer "golayout/pkg/http"
 	"golayout/pkg/logger"
 )
 
@@ -30,12 +27,20 @@ func main() {
 	}
 	defer logger.Sync()
 
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
+	err = etcd.InitEtcd(clientv3.Config{
+		Endpoints: apiOpt.Etcd.Endpoints,
+	})
+	if err != nil {
+		logger.Fatalf("init etcd failed: ", err)
+		panic(err.Error())
+	}
 
-	r.Get("/version", api.Version)
+	businessLogical, err := api.NewServer("monitor", &apiOpt)
+	if err != nil{
+		logger.Fatal("init api server: ", err)
+	}
 
-	listenAddr := fmt.Sprintf("%s:%d", apiOpt.Server.Listen, apiOpt.Server.Port)
-	logger.Infof("serving http://%s", listenAddr)
-	logger.Fatal(http.ListenAndServe(listenAddr, r))
+	s := httpServer.NewServer(apiOpt.Server.Listen, apiOpt.Server.Port)
+	s.RouterRegister(businessLogical)
+	logger.Fatal(s.Run())
 }

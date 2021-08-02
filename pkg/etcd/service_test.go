@@ -46,8 +46,28 @@ func TestServiceAdd(t *testing.T){
 		t.Error(err)
 	}
 	t.Log(list)
-	if list[0] != registerAddr{
+	arrayHas := func(arr []string, str string)bool{
+		for _, e := range(arr){
+			if e == str{
+				return true
+			}
+		}
+		return false
+	}
+	if !arrayHas(list, registerAddr){
 		t.Errorf("list service is not equal register, want=%s, out=%s", registerAddr, list[0])
+	}
+
+	err = ServiceDelete(EndpointsKey, registerAddr)
+	if err != nil{
+		t.Error(err)
+	}
+	list, err = ServiceList(EndpointsKey)
+	if err != nil{
+		t.Error(err)
+	}
+	if arrayHas(list, registerAddr){
+		t.Errorf("call service delete failed: %v", err)
 	}
 }
 
