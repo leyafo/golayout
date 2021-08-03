@@ -18,15 +18,15 @@ services:
       - --name
       - node1
       - --initial-advertise-peer-urls
-      - http://172.16.238.100:2380
+      - httpctrl://172.16.238.100:2380
       - --listen-peer-urls
-      - http://0.0.0.0:2380
+      - httpctrl://0.0.0.0:2380
       - --advertise-client-urls
-      - http://172.16.238.100:2379
+      - httpctrl://172.16.238.100:2379
       - --listen-client-urls
-      - http://0.0.0.0:2379
+      - httpctrl://0.0.0.0:2379
       - --initial-cluster
-      - node1=http://172.16.238.100:2380,node2=http://172.16.238.101:2380,node3=http://172.16.238.102:2380
+      - node1=httpctrl://172.16.238.100:2380,node2=httpctrl://172.16.238.101:2380,node3=httpctrl://172.16.238.102:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token
@@ -50,15 +50,15 @@ services:
       - --name
       - node2
       - --initial-advertise-peer-urls
-      - http://172.16.238.101:2380
+      - httpctrl://172.16.238.101:2380
       - --listen-peer-urls
-      - http://0.0.0.0:2380
+      - httpctrl://0.0.0.0:2380
       - --advertise-client-urls
-      - http://172.16.238.101:2379
+      - httpctrl://172.16.238.101:2379
       - --listen-client-urls
-      - http://0.0.0.0:2379
+      - httpctrl://0.0.0.0:2379
       - --initial-cluster
-      - node1=http://172.16.238.100:2380,node2=http://172.16.238.101:2380,node3=http://172.16.238.102:2380
+      - node1=httpctrl://172.16.238.100:2380,node2=httpctrl://172.16.238.101:2380,node3=httpctrl://172.16.238.102:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token
@@ -82,15 +82,15 @@ services:
       - --name
       - node3
       - --initial-advertise-peer-urls
-      - http://172.16.238.102:2380
+      - httpctrl://172.16.238.102:2380
       - --listen-peer-urls
-      - http://0.0.0.0:2380
+      - httpctrl://0.0.0.0:2380
       - --advertise-client-urls
-      - http://172.16.238.102:2379
+      - httpctrl://172.16.238.102:2379
       - --listen-client-urls
-      - http://0.0.0.0:2379
+      - httpctrl://0.0.0.0:2379
       - --initial-cluster
-      - node1=http://172.16.238.100:2380,node2=http://172.16.238.101:2380,node3=http://172.16.238.102:2380
+      - node1=httpctrl://172.16.238.100:2380,node2=httpctrl://172.16.238.101:2380,node3=httpctrl://172.16.238.102:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token

@@ -26,6 +26,7 @@ func NewDefaultOption(debug bool, logPath string) *Options {
 	}
 
 	opt := new(Options)
+
 	opt.Config = &zap.Config{
 		Encoding: "console",
 		EncoderConfig: zap.NewProductionEncoderConfig(),
@@ -59,7 +60,7 @@ func NewDefaultOption(debug bool, logPath string) *Options {
 
 //InitLog initialize the log module
 func InitLog(opts *Options)(err error){
-	zapLogger, err = opts.Build()
+	zapLogger, err = opts.Build(zap.AddCallerSkip(1))
 	if err != nil{
 		return err
 	}

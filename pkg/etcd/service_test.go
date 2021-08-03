@@ -12,7 +12,7 @@ import (
 var(
 	EndpointsKey = "service/golayout/test"
 	etcdOption = daemon.EtcdOption{
-		Endpoints:  []string{"http://172.16.238.100:2380","http://172.16.238.101:2380","http://172.16.238.102:2380"},
+		Endpoints:  []string{"httpctrl://172.16.238.100:2380","httpctrl://172.16.238.101:2380","httpctrl://172.16.238.102:2380"},
 		EndpointsKey: EndpointsKey,
 	}
 )

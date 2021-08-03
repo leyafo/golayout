@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	pbCommon "golayout/internal/proto/common"
@@ -9,12 +10,22 @@ import (
 	"strings"
 )
 
-//Version Get all backend services version
-func (s *Server)Version(w http.ResponseWriter, r *http.Request) {
+func VersionDoc()(doc, input, output string){
+	exampleOutput := new(bytes.Buffer)
 	versions := make(map[string]*version.Ver)
 	versions["api"] = version.GetVersion()
 
-	monitorCli := pbCommon.NewCommonClient(s.grpcMonitorBackend)
+	json.NewEncoder(exampleOutput).Encode(versions)
+
+	return "version's document text write here", "", exampleOutput.String()
+}
+
+//Version Get all backend services version
+func Version(w http.ResponseWriter, r *http.Request) {
+	versions := make(map[string]*version.Ver)
+	versions["api"] = version.GetVersion()
+
+	monitorCli := pbCommon.NewCommonClient(nil)
 	replay, err := monitorCli.Version(context.TODO(), &pbCommon.VersionRequest{})
 	if err != nil{
 		w.WriteHeader(http.StatusInternalServerError)

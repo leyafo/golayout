@@ -5,7 +5,7 @@ import (
 	"golayout/internal/api"
 	"golayout/pkg/daemon"
 	"golayout/pkg/etcd"
-	httpServer "golayout/pkg/http"
+	"golayout/pkg/httpctrl"
 	"golayout/pkg/logger"
 )
 
@@ -31,16 +31,15 @@ func main() {
 		Endpoints: apiOpt.Etcd.Endpoints,
 	})
 	if err != nil {
-		logger.Fatalf("init etcd failed: ", err)
+		logger.Fatalf("init etcd failed:", err)
 		panic(err.Error())
 	}
 
-	businessLogical, err := api.NewServer("monitor", &apiOpt)
+	s := httpctrl.NewServer(apiOpt.Server.Listen, apiOpt.Server.Port)
+	err = api.InitApi(s, apiOpt.Etcd)
 	if err != nil{
-		logger.Fatal("init api server: ", err)
+		logger.Fatal("init api failed:", err)
 	}
 
-	s := httpServer.NewServer(apiOpt.Server.Listen, apiOpt.Server.Port)
-	s.RouterRegister(businessLogical)
 	logger.Fatal(s.Run())
 }
