@@ -36,7 +36,8 @@ func ServiceAdd(endpointsKey, addr string) error {
 		if err != nil{
 			return err
 		}
-		return em.AddEndpoint(etcdClientV3.Ctx(), endpointsKey+"/"+addr, endpoints.Endpoint{Addr: addr});
+		err= em.AddEndpoint(etcdClientV3.Ctx(), endpointsKey+"/"+addr, endpoints.Endpoint{Addr: addr});
+		return err
 }
 
 //ServiceList list registered services
@@ -58,7 +59,6 @@ func ServiceList(endpointsKey string)([]string, error){
 	return result, err
 }
 
-
 //ServiceAddWithLease add a endpoint service with lease
 func ServiceAddWithLease(lid clientv3.LeaseID, endpointsKey, addr string) error {
 	em, err := endpoints.NewManager(etcdClientV3, endpointsKey)
@@ -77,14 +77,14 @@ func ServiceDelete(endpointsKey, addr string) error {
 	return em.DeleteEndpoint(etcdClientV3.Ctx(), endpointsKey+"/"+addr)
 }
 
-//DialGrpc dial an RPC service using the etcd gRPC resolver and balancer:
-func DialGrpc(endpointsKey, serviceName string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
+//DialGrpc dial an RPC service using the etcd gRPC resolver and balancer
+func DialGrpc(ctx context.Context, endpointsKey, serviceName string, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
 	etcdResolver, err := resolver.NewBuilder(etcdClientV3)
 	if err != nil{
 		return nil, err
 	}
 	opts = append(opts, grpc.WithResolvers(etcdResolver))
-	return  grpc.Dial("etcd:///" +endpointsKey + "/"+ serviceName, opts...)
+	return  grpc.DialContext(ctx, "etcd:///" +endpointsKey + "/"+ serviceName, opts...)
 }
 
 

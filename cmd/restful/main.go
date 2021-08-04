@@ -26,6 +26,7 @@ func main() {
 		panic(err)
 	}
 	defer logger.Sync()
+	logger.Infof("configuration is: %+v", apiOpt)
 
 	err = etcd.InitEtcd(clientv3.Config{
 		Endpoints: apiOpt.Etcd.Endpoints,

@@ -30,9 +30,9 @@ CGO_SWITCH := 0
 proto:
 	${MKFILE_DIR}bin/buf generate
 
-build: restful
+build: restful monitor
 
-restful:
+restful monitor:
 	cd ${MKFILE_DIR} && \
 	CGO_ENABLED=${CGO_SWITCH} go build -v -trimpath -ldflags ${GO_LD_FLAGS} \
 	-o ${RELEASE_DIR}/$@ ${MKFILE_DIR}cmd/$@/

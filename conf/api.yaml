@@ -4,12 +4,12 @@ log:
   debug: true
 
 server:
-  listen:
+  listen: 127.0.0.1
   port: 9527
 
 etcd:
+  key: service/golayout/
   endpoints:
-    - httpctrl://172.16.238.100:2380
-    - httpctrl://172.16.238.101:2380
-    - httpctrl://172.16.238.102:2380
-  endpoints_key: service/golayout/
+    - http://172.16.238.100:2380
+    - http://172.16.238.101:2380
+    - http://172.16.238.102:2380

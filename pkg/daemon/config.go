@@ -28,7 +28,7 @@ type Server struct{
 
 type EtcdOption struct{
 	Endpoints []string
-	EndpointsKey string
+	Key       string
 }
 
 type ApiOption struct{

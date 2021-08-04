@@ -10,10 +10,9 @@ import (
 )
 
 var(
-	EndpointsKey = "service/golayout/test"
 	etcdOption = daemon.EtcdOption{
-		Endpoints:  []string{"httpctrl://172.16.238.100:2380","httpctrl://172.16.238.101:2380","httpctrl://172.16.238.102:2380"},
-		EndpointsKey: EndpointsKey,
+		Endpoints: []string{"http://172.16.238.100:2380","http://172.16.238.101:2380","http://172.16.238.102:2380"},
+		Key:      "service/golayout/test",
 	}
 )
 
@@ -37,11 +36,11 @@ func TestMain(m *testing.M) {
 
 func TestServiceAdd(t *testing.T){
 	registerAddr := "1.2.3.4"
-	err := ServiceAdd(EndpointsKey, registerAddr)
+	err := ServiceAdd(etcdOption.Key, registerAddr)
 	if err != nil{
 		t.Error(err)
 	}
-	list, err := ServiceList(EndpointsKey)
+	list, err := ServiceList(etcdOption.Key)
 	if err != nil{
 		t.Error(err)
 	}
@@ -58,11 +57,11 @@ func TestServiceAdd(t *testing.T){
 		t.Errorf("list service is not equal register, want=%s, out=%s", registerAddr, list[0])
 	}
 
-	err = ServiceDelete(EndpointsKey, registerAddr)
+	err = ServiceDelete(etcdOption.Key, registerAddr)
 	if err != nil{
 		t.Error(err)
 	}
-	list, err = ServiceList(EndpointsKey)
+	list, err = ServiceList(etcdOption.Key)
 	if err != nil{
 		t.Error(err)
 	}

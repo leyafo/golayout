@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
+	"text/template"
 )
 
 type HandlerDoc func()(doc, input, output string)
@@ -19,6 +20,15 @@ type Router struct{
 	Path string
 	Handler http.HandlerFunc
 	Doc HandlerDoc
+}
+
+type Document struct {
+	ApiName string
+	Method string
+	Path string
+	Doc string
+	Input string
+	Output string
 }
 
 type Server struct{
@@ -30,7 +40,7 @@ type Server struct{
 
 func NewServer(host string, port int)*Server{
 	s := &Server{}
-	s.chiRouter = chi.NewRouter()
+	s.chiRouter = chi.NewMux()
 	s.chiRouter.Use(middleware.Logger)
 	s.addr = fmt.Sprintf("%s:%d", host, port)
 	s.routers = make(map[string]Router)
@@ -74,7 +84,8 @@ func (s *Server)Run()error{
 	return http.ListenAndServe(s.addr, s.chiRouter)
 }
 
-func (s *Server)GenerateDocument(writer io.Writer){
+func (s *Server)GenerateDocument(template *template.Template, writer io.Writer) error{
+	var docs []Document
 	for _, router := range s.routers {
 		apiName := runtime.FuncForPC(reflect.ValueOf(router.Handler).Pointer()).Name()
 		apiName = apiName[strings.IndexByte(apiName, '.')+1:]
@@ -82,8 +93,17 @@ func (s *Server)GenerateDocument(writer io.Writer){
 			doc, input, output := router.Doc()
 			logger.Infof("apiName=%s  method=%s path=%s doc=%s input=%s, output=%s",
 				apiName, router.Method, router.Path, doc, input, output)
+			docs = append(docs, Document{
+				ApiName: apiName,
+				Method:  router.Method,
+				Path:    router.Path,
+				Doc:     doc,
+				Input:   input,
+				Output:  output,
+			})
 		}
 	}
+	return template.Execute(writer, &docs)
 }
 
 func (s *Server) RoutersRegister(version string, routers []Router)error{

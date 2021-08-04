@@ -1,4 +1,4 @@
-package monitor
+package main
 
 import (
 	"fmt"
@@ -12,6 +12,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"time"
 )
 
 func main() {
@@ -31,12 +32,14 @@ func main() {
 		panic(err)
 	}
 	defer logger.Sync()
+	logger.Infof("configuration is %+v", monitorOpt)
 
 	addr := fmt.Sprintf("%s:%d", monitorOpt.Server.Listen, monitorOpt.Server.Port)
 	l, e := net.Listen("tcp", addr)
 	if e != nil {
 		log.Fatal("listen error:", e)
 	}
+	logger.Infof("listening %s ...", addr)
 
 	err = etcd.InitEtcd(clientv3.Config{
 		Endpoints: monitorOpt.Etcd.Endpoints,
@@ -47,12 +50,20 @@ func main() {
 
 	server := grpc.NewServer()
 	monitor.RegisterRpc(server)
-	go log.Fatal(server.Serve(l))
+	go server.Serve(l)
 
-	if err = etcd.ServiceAdd(monitorOpt.Etcd.EndpointsKey, addr); err != nil{
+	if err = etcd.ServiceAdd(monitorOpt.Etcd.Key, addr); err != nil{
 		log.Fatal("add etcd service failed: ", err)
 	}
 
+	for i:=0; i<10; i++{
+		var l []string
+		if l , err = etcd.ServiceList(monitorOpt.Etcd.Key); err != nil{
+			log.Fatal("add etcd service failed: ", err)
+		}
+		logger.Infof("list=%+v", l)
+		time.Sleep(time.Second*2)
+	}
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	<- c
