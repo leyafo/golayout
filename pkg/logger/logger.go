@@ -8,47 +8,46 @@ import (
 
 var (
 	sugaredLogger *zap.SugaredLogger
-	zapLogger *zap.Logger
+	zapLogger     *zap.Logger
 )
 
-
-type Options struct{
+type Options struct {
 	*zap.Config
 }
 
 //NewDefaultOption initialize the log options, the logPath's directory must create before use it.
 func NewDefaultOption(debug bool, logPath string) *Options {
 	var logPaths []string
-	if logPath == ""{ //log to stdout
+	if logPath == "" { //log to stdout
 		logPaths = append(logPaths, "stdout")
-	}else{
+	} else {
 		logPaths = append(logPaths, logPath, "stdout")
 	}
 
 	opt := new(Options)
 
 	opt.Config = &zap.Config{
-		Encoding: "console",
+		Encoding:      "console",
 		EncoderConfig: zap.NewProductionEncoderConfig(),
-		OutputPaths: logPaths,
+		OutputPaths:   logPaths,
 	}
 	l := zap.NewAtomicLevel()
-	if debug == true{
+	if debug == true {
 		l.SetLevel(zapcore.DebugLevel)
-	}else{
+	} else {
 		l.SetLevel(zapcore.InfoLevel)
 	}
 	opt.Level = l
 
 	opt.EncoderConfig = zapcore.EncoderConfig{
-		TimeKey:        "time",
-		LevelKey:       "level",
-		CallerKey:      "caller",
-		NameKey: "",
-		EncodeName:     zapcore.FullNameEncoder,
-		MessageKey:     "message",
-		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.CapitalColorLevelEncoder,
+		TimeKey:     "time",
+		LevelKey:    "level",
+		CallerKey:   "caller",
+		NameKey:     "",
+		EncodeName:  zapcore.FullNameEncoder,
+		MessageKey:  "message",
+		LineEnding:  zapcore.DefaultLineEnding,
+		EncodeLevel: zapcore.CapitalColorLevelEncoder,
 		EncodeTime: func(t time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 			encoder.AppendString(t.Format(time.RFC3339))
 		},
@@ -58,10 +57,10 @@ func NewDefaultOption(debug bool, logPath string) *Options {
 	return opt
 }
 
-//InitLog initialize the log module
-func InitLog(opts *Options)(err error){
+//Init initialize the log module
+func Init(opts *Options) (err error) {
 	zapLogger, err = opts.Build(zap.AddCallerSkip(1))
-	if err != nil{
+	if err != nil {
 		return err
 	}
 	sugaredLogger = zapLogger.Sugar()

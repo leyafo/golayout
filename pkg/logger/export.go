@@ -52,7 +52,7 @@ func Fatalf(template string, args ...interface{}) {
 	sugaredLogger.Fatalf(template, args...)
 }
 
-func FastLogger()*zap.Logger{
+func FastLogger() *zap.Logger {
 	return zapLogger
 }
 

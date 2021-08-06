@@ -8,12 +8,11 @@ PROTOS = `ls proto`
 # Path Related
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MKFILE_DIR := $(dir $(MKFILE_PATH))
-MKFILE_DIR := $(dir $(MKFILE_PATH))
 RELEASE_DIR := ${MKFILE_DIR}bin
-DOCKER_TAG := zeroone/opsnft
+DOCKER_TAG := golayout
 
 # Version
-RELEASE?=1.0.1
+RELEASE?=0.0.1
 ifndef GIT_COMMIT
   GIT_COMMIT := git-$(shell git rev-parse --short HEAD)
 endif

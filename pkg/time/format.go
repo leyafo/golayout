@@ -2,6 +2,6 @@ package time
 
 import "time"
 
-const(
+const (
 	RFC3399 = time.RFC3339
 )

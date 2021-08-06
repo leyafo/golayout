@@ -5,8 +5,8 @@ import (
 	"text/template"
 )
 
-var(
-	tmpl = template.Must(template.New("doc").Parse( `
+var (
+	tmpl = template.Must(template.New("doc").Parse(`
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
@@ -37,9 +37,9 @@ var(
 `))
 )
 
-func Doc(w http.ResponseWriter, r *http.Request){
+func Doc(w http.ResponseWriter, r *http.Request) {
 	err := ctrlServer.GenerateDocument(tmpl, w)
-	if err != nil{
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

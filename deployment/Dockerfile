@@ -3,7 +3,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
     apk update &&\
     apk --no-cache add make git build-base linux-headers
 
-WORKDIR /opt/ops
+WORKDIR /opt/app
 COPY . .
 
 #build at China
@@ -12,20 +12,18 @@ RUN go env -w GOPROXY=https://goproxy.cn,direct && \
 
 FROM alpine:latest
 
-WORKDIR /opt/ops
+WORKDIR /opt/app
 
 COPY deployment/entrypoint.sh /
-COPY deployment/glibc-2.33-r0.apk /tmp/
-COPY --from=builder /opt/ops/bin/ /opt/ops/bin/
-COPY --from=builder /opt/ops/conf/ /opt/ops/conf/
+COPY --from=builder /opt/app/bin/ /opt/app/bin/
+COPY --from=builder /opt/app/conf/ /opt/app/conf/
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g" /etc/apk/repositories &&\
    apk update && apk --no-cache add tini tzdata ca-certificates && \
-   touch repo.list && apk add --repositories-file=repo.list --allow-untrusted --no-network --no-cache /tmp/glibc-2.33-r0.apk &&\
-   mkdir -p /opt/ops/log && \
+   mkdir -p /opt/app/log && \
    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
-   chmod +x /entrypoint.sh /opt/ops/bin/*
+   chmod +x /entrypoint.sh /opt/app/bin/*
 
-ENV PATH /opt/ops/bin:$PATH
+ENV PATH /opt/app/bin:$PATH
 
 ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]

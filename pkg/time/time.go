@@ -29,4 +29,3 @@ func NowUnix() int64 {
 func Since(t time.Time) time.Duration {
 	return Now().Sub(t)
 }
-

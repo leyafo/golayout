@@ -5,13 +5,12 @@ import (
 	"os"
 )
 
-type Flags struct{
+type Flags struct {
 	ConfigFile string
-	flags *pflag.FlagSet
+	flags      *pflag.FlagSet
 }
 
-
-func ParseFlags()(*Flags, error){
+func ParseFlags() (*Flags, error) {
 	opt := &Flags{
 		flags: pflag.NewFlagSet(os.Args[0], pflag.ContinueOnError),
 	}

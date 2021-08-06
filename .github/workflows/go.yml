@@ -1,0 +1,27 @@
+name: GoActions
+on:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  local-cache:
+    name: Setup local-cache version
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        go: [1.16]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+
+      - name: setup-go ${{ matrix.go }}
+        uses: action/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+      - run: go version

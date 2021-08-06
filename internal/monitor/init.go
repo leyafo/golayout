@@ -5,6 +5,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-func RegisterRpc(s *grpc.Server){
+func RegisterRpc(s *grpc.Server) {
 	pbCommon.RegisterCommonServer(s, &Version{})
 }
