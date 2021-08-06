@@ -4,7 +4,6 @@ on:
     branches:
       - master
 
-
 jobs:
   local-cache:
     name: Setup local-cache version
@@ -16,12 +15,8 @@ jobs:
         go: [1.16]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-
-      - name: setup-go ${{ matrix.go }}
-        uses: action/setup-go@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
         with:
-          go-version: ${{ matrix.go }}
-      - run: go version
+          go-version: ${{matrix.go}}
+      - run: go vet ./...
