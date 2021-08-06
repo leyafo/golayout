@@ -32,5 +32,4 @@ jobs:
           go vet ./...
           sh scripts/install_buf.sh
           chmod +x tools/*
-          make proto
-          make build
+          tools/buf lint
