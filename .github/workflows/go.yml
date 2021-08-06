@@ -30,5 +30,7 @@ jobs:
         run: |
           go mod tidy
           go vet ./...
+          sh scripts/install_buf.sh
           chmod +x tools/*
-          make proto && make build
+          make proto
+          make build
