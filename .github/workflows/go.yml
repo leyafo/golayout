@@ -15,8 +15,19 @@ jobs:
         go: [1.16]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - name: checkout codebase
+        uses: actions/checkout@v2
+
+      - name: Setup go
+        uses: actions/setup-go@v2
         with:
           go-version: ${{matrix.go}}
-      - run: go vet ./...
+
+      - name: ensure the go has been installed
+        run: go version
+
+      - name: run lint
+        run: |
+          go mod tidy
+          go vet ./...
+          make proto && make build
