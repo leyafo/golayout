@@ -8,3 +8,4 @@ GO111MODULE=on GOBIN=$PWD/tools go get \
     github.com/bufbuild/buf/cmd/protoc-gen-buf-lint \
 
 GO111MODULE=on go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
+GO111MODULE=on go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
