@@ -27,8 +27,8 @@ GO_LD_FLAGS= "-s -w -X ${PROJECT_NAME}/pkg/version.RELEASE=${RELEASE} -X ${PROJE
 CGO_SWITCH := 0
 
 proto:
-	${MKFILE_DIR}tools/buf lint
-	${MKFILE_DIR}tools/buf generate
+	${MKFILE_DIR}bin/buf lint
+	${MKFILE_DIR}bin/buf generate
 
 build: restful monitor
 
