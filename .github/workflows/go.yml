@@ -30,4 +30,5 @@ jobs:
         run: |
           go mod tidy
           go vet ./...
+          chmod +x tools/*
           make proto && make build
