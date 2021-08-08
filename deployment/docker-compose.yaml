@@ -1,5 +1,25 @@
 version: "3.6"
 services:
+  restful:
+    image: golayout:0.0.1
+    ports:
+      - 9527:9527
+    networks:
+      cluster_net:
+        ipv4_address: 172.16.238.10
+    command:
+      restful -f conf/api.yaml
+
+  monitor:
+    image: golayout:0.0.1
+    expose:
+      - 9528
+    networks:
+      cluster_net:
+        ipv4_address: 172.16.238.11
+    command:
+      monitor -f conf/monitor.yaml -r 172.16.238.11:9528
+
   node1:
     image: gcr.io/etcd-development/etcd:v3.5.0
     volumes:
@@ -18,15 +38,15 @@ services:
       - --name
       - node1
       - --initial-advertise-peer-urls
-      - httpctrl://172.16.238.100:2380
+      - http://172.16.238.100:2380
       - --listen-peer-urls
-      - httpctrl://0.0.0.0:2380
+      - http://0.0.0.0:2380
       - --advertise-client-urls
-      - httpctrl://172.16.238.100:2379
+      - http://172.16.238.100:2379
       - --listen-client-urls
-      - httpctrl://0.0.0.0:2379
+      - http://0.0.0.0:2379
       - --initial-cluster
-      - node1=httpctrl://172.16.238.100:2380,node2=httpctrl://172.16.238.101:2380,node3=httpctrl://172.16.238.102:2380
+      - node1=http://172.16.238.100:2380,node2=http://172.16.238.101:2380,node3=http://172.16.238.102:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token
@@ -50,15 +70,15 @@ services:
       - --name
       - node2
       - --initial-advertise-peer-urls
-      - httpctrl://172.16.238.101:2380
+      - http://172.16.238.101:2380
       - --listen-peer-urls
-      - httpctrl://0.0.0.0:2380
+      - http://0.0.0.0:2380
       - --advertise-client-urls
-      - httpctrl://172.16.238.101:2379
+      - http://172.16.238.101:2379
       - --listen-client-urls
-      - httpctrl://0.0.0.0:2379
+      - http://0.0.0.0:2379
       - --initial-cluster
-      - node1=httpctrl://172.16.238.100:2380,node2=httpctrl://172.16.238.101:2380,node3=httpctrl://172.16.238.102:2380
+      - node1=http://172.16.238.100:2380,node2=http://172.16.238.101:2380,node3=http://172.16.238.102:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token
@@ -82,15 +102,15 @@ services:
       - --name
       - node3
       - --initial-advertise-peer-urls
-      - httpctrl://172.16.238.102:2380
+      - http://172.16.238.102:2380
       - --listen-peer-urls
-      - httpctrl://0.0.0.0:2380
+      - http://0.0.0.0:2380
       - --advertise-client-urls
-      - httpctrl://172.16.238.102:2379
+      - http://172.16.238.102:2379
       - --listen-client-urls
-      - httpctrl://0.0.0.0:2379
+      - http://0.0.0.0:2379
       - --initial-cluster
-      - node1=httpctrl://172.16.238.100:2380,node2=httpctrl://172.16.238.101:2380,node3=httpctrl://172.16.238.102:2380
+      - node1=http://172.16.238.100:2380,node2=http://172.16.238.101:2380,node3=http://172.16.238.102:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token

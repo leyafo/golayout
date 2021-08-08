@@ -2,6 +2,7 @@ package etcd
 
 import (
 	"context"
+	"golayout/pkg/logger"
 	"google.golang.org/grpc"
 	"sync"
 	"time"
@@ -26,6 +27,7 @@ func Init(endpoints []string) error {
 
 //ServiceAdd add a endpoint service
 func ServiceAdd(key, value string) error {
+	logger.Infof("add service key=%s value=%s", key, value)
 	return etcdClientV3.Register(etcdv3.Service{
 		Key:   key,
 		Value: value,

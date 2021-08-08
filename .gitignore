@@ -1,4 +1,6 @@
 go.sum
+
 .idea/
 bin/
 log/
+tools/

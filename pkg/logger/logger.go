@@ -15,6 +15,13 @@ type Options struct {
 	*zap.Config
 }
 
+//If we didn't call Init, use the default configuration
+func init(){
+	defaultConfig := zap.NewDevelopmentConfig()
+	zapLogger, _ = defaultConfig.Build(zap.AddCallerSkip(1))
+	sugaredLogger = zapLogger.Sugar()
+}
+
 //NewDefaultOption initialize the log options, the logPath's directory must create before use it.
 func NewDefaultOption(debug bool, logPath string) *Options {
 	var logPaths []string

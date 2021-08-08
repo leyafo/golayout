@@ -6,8 +6,9 @@ import (
 )
 
 type Flags struct {
-	ConfigFile string
-	flags      *pflag.FlagSet
+	ConfigFile   string
+	RegisterAddr string
+	flags        *pflag.FlagSet
 }
 
 func ParseFlags() (*Flags, error) {
@@ -16,6 +17,7 @@ func ParseFlags() (*Flags, error) {
 	}
 
 	opt.flags.StringVarP(&opt.ConfigFile, "config", "f", "", "load the config file name")
+	opt.flags.StringVarP(&opt.RegisterAddr, "registerAddr", "r", "", "listening the special address")
 	err := opt.flags.Parse(os.Args[1:])
 	if err != nil {
 		return nil, err

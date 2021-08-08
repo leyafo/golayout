@@ -4,7 +4,7 @@ log:
   debug: true
 
 server:
-  listen: 127.0.0.1
+  listen: 0.0.0.0
   port: 9528
 
 etcd:

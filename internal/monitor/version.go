@@ -14,7 +14,7 @@ type Version struct {
 }
 
 func (s *Version) Version(ctx context.Context, in *pbCommon.VersionRequest) (*pbCommon.VersionReply, error) {
-	log.Printf("Received: %v", in.GetName())
+	log.Printf("Received: %v", in)
 	v := version.GetVersion()
 	b := &strings.Builder{}
 	err := json.NewEncoder(b).Encode(&v)

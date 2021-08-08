@@ -39,7 +39,7 @@ func main() {
 	logger.Infof("listening %s ...", addr)
 
 	server := grpc.NewServer()
-	monitor.RegisterRpc(server)
+	monitor.RegisterServerStub(server)
 	go server.Serve(l)
 
 	err = etcd.Init(monitorOpt.Etcd.Endpoints)
@@ -47,7 +47,11 @@ func main() {
 		panic(err)
 	}
 
-	err = etcd.ServiceAdd(monitorOpt.Etcd.Key, addr)
+	registerAddr := addr
+	if flags.RegisterAddr != ""{
+		 registerAddr =  flags.RegisterAddr
+	}
+	err = etcd.ServiceAdd(monitorOpt.Etcd.Key, registerAddr)
 	if err != nil {
 		panic(err)
 	}

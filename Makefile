@@ -27,8 +27,8 @@ GO_LD_FLAGS= "-s -w -X ${PROJECT_NAME}/pkg/version.RELEASE=${RELEASE} -X ${PROJE
 CGO_SWITCH := 0
 
 proto:
-	${MKFILE_DIR}bin/buf lint
-	${MKFILE_DIR}bin/buf generate
+	${MKFILE_DIR}tools/buf lint
+	${MKFILE_DIR}tools/buf generate
 
 build: restful monitor
 
@@ -47,7 +47,7 @@ clean:
 	@rm -f ${MKFILE_DIR}bin/*
 
 up:
-	docker-compose -f deployment/docker-compose-local.yaml up -d
+	docker-compose -f deployment/docker-compose.yaml up -d
 
 down:
-	docker-compose -f deployment/docker-compose-local.yaml down
+	docker-compose -f deployment/docker-compose.yaml down
