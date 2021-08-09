@@ -30,6 +30,5 @@ jobs:
         run: |
           go mod tidy
           go vet ./...
-          sh scripts/install_buf.sh
           chmod +x tools/*
           tools/buf lint

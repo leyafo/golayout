@@ -17,7 +17,7 @@ func VersionDoc() (doc, input, output string) {
 	jsonBytes, _ := json.MarshalIndent(&versions, "", "\t")
 	output = string(jsonBytes)
 
-	return "version's document text write here", "", strings.TrimSpace(output)
+	return "version's document text write here", "nil", strings.TrimSpace(output)
 }
 
 //Version Get all backend services version
