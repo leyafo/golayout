@@ -78,7 +78,7 @@ curl -i http://localhost:9527/v1/version
 ```
 
 ## Contribution
-If you have any advice, thoughts, and best practice, feel free to commit the pull requests. This project doesn't have any historical burden or business trad-off. You can implement your thoughts in this project without trouble.
+If you have any advice, thoughts, and best practice, feel free to commit the pull requests. This project doesn't have any historical burden or business trade-off. You can implement your thoughts in this project without troubles.
 
 ## License
 MIT License
