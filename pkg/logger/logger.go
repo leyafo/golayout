@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"bridgeswap/pkg/path"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"
@@ -22,12 +23,14 @@ func init(){
 	sugaredLogger = zapLogger.Sugar()
 }
 
+
 //NewDefaultOption initialize the log options, the logPath's directory must create before use it.
 func NewDefaultOption(debug bool, logPath string) *Options {
 	var logPaths []string
 	if logPath == "" { //log to stdout
 		logPaths = append(logPaths, "stdout")
 	} else {
+		path.MakeParentDir(logPath)
 		logPaths = append(logPaths, logPath, "stdout")
 	}
 

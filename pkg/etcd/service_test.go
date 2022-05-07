@@ -3,8 +3,8 @@ package etcd
 import (
 	"fmt"
 	clientv3 "go.etcd.io/etcd/client/v3"
-	"golayout/pkg/daemon"
-	"golayout/pkg/logger"
+	"bridgeswap/pkg/daemon"
+	"bridgeswap/pkg/logger"
 	"os"
 	"testing"
 )
@@ -12,7 +12,7 @@ import (
 var (
 	etcdOption = daemon.EtcdOption{
 		Endpoints: []string{"http://172.16.238.100:2380", "http://172.16.238.101:2380", "http://172.16.238.102:2380"},
-		Key:       "service/golayout/test",
+		Key:       "service/bridgeswap/test",
 	}
 )
 

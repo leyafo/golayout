@@ -3,7 +3,7 @@ package etcd
 import (
 	"context"
 	"errors"
-	"golayout/pkg/logger"
+	"bridgeswap/pkg/logger"
 	"google.golang.org/grpc"
 	"sync"
 	"sync/atomic"

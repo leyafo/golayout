@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"golayout/pkg/logger"
+	"bridgeswap/pkg/logger"
 	"io"
 	"net/http"
 	"path"
@@ -47,8 +47,8 @@ func NewServer(host string, port int) *Server {
 	return s
 }
 
-func (s *Server) AddMiddlewares(middlewares ...func(http.Handler) http.Handler) {
-	s.middlewares = append(s.middlewares, middlewares...)
+func (s *Server) AddMiddleware(middleware func(http.Handler) http.Handler) {
+	s.chiRouter.Use(middleware)
 }
 
 func (s *Server) Run() error {

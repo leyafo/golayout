@@ -2,7 +2,7 @@ package etcd
 
 import (
 	"context"
-	"golayout/pkg/logger"
+	"bridgeswap/pkg/logger"
 	"google.golang.org/grpc"
 	"sync"
 	"time"
