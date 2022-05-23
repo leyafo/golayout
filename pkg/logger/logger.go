@@ -1,10 +1,11 @@
 package logger
 
 import (
-	"bridgeswap/pkg/path"
+	"golayout/pkg/path"
+	"time"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"time"
 )
 
 var (
@@ -17,12 +18,11 @@ type Options struct {
 }
 
 //If we didn't call Init, use the default configuration
-func init(){
+func init() {
 	defaultConfig := zap.NewDevelopmentConfig()
 	zapLogger, _ = defaultConfig.Build(zap.AddCallerSkip(1))
 	sugaredLogger = zapLogger.Sugar()
 }
-
 
 //NewDefaultOption initialize the log options, the logPath's directory must create before use it.
 func NewDefaultOption(debug bool, logPath string) *Options {

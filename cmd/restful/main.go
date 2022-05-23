@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"golayout/internal/api"
 	"golayout/pkg/daemon"
-	"golayout/pkg/etcd"
-	"golayout/pkg/httpctrl"
 	"golayout/pkg/logger"
+	"net/http"
 )
 
 func main() {
@@ -19,6 +19,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+	daemon.SetGlobalApiOption(&apiOpt)
 
 	err = logger.Init(logger.NewDefaultOption(apiOpt.Log.Debug, apiOpt.Log.Path))
 	if err != nil {
@@ -27,16 +28,7 @@ func main() {
 	defer logger.Sync()
 	logger.Infof("configuration is: %+v", apiOpt)
 
-	err = etcd.Init(apiOpt.Etcd.Endpoints)
-	if err != nil {
-		logger.Fatalf("init etcd failed:", err)
-	}
-
-	s := httpctrl.NewServer(apiOpt.Server.Listen, apiOpt.Server.Port)
-	err = api.Init(s, &apiOpt.Etcd)
-	if err != nil {
-		logger.Fatal("init api failed:", err)
-	}
-
-	logger.Fatal(s.Run())
+	addr := fmt.Sprintf("%s:%d", apiOpt.Server.Listen, apiOpt.Server.Port)
+	logger.Infof("Starting server on %v\n", addr)
+	logger.Fatal(http.ListenAndServe(addr, api.Router()))
 }

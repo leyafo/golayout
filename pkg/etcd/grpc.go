@@ -3,10 +3,11 @@ package etcd
 import (
 	"context"
 	"errors"
-	"bridgeswap/pkg/logger"
-	"google.golang.org/grpc"
+	"golayout/pkg/logger"
 	"sync"
 	"sync/atomic"
+
+	"google.golang.org/grpc"
 )
 
 type policyType int

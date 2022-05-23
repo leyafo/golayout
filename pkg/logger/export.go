@@ -1,6 +1,11 @@
 package logger
 
-import "go.uber.org/zap"
+import (
+	"net/http"
+
+	"github.com/go-chi/chi/v5/middleware"
+	"go.uber.org/zap"
+)
 
 // Debugf is the wrapper of default logger Debugf.
 func Debugf(template string, args ...interface{}) {
@@ -54,6 +59,10 @@ func Fatalf(template string, args ...interface{}) {
 
 func FastLogger() *zap.Logger {
 	return zapLogger
+}
+
+func WithHTTP(r *http.Request) *zap.Logger {
+	return zapLogger.With(zap.String("req_id", middleware.GetReqID(r.Context())))
 }
 
 // Sync syncs all logs, must be called after calling Init().

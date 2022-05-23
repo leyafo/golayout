@@ -2,7 +2,7 @@ package version
 
 import (
 	"fmt"
-	"bridgeswap/pkg/time"
+	"golayout/pkg/time"
 )
 
 var (

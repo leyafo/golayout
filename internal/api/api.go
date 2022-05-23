@@ -1,40 +1,51 @@
 package api
 
 import (
-	"context"
-	"golayout/pkg/daemon"
-	"golayout/pkg/etcd"
+	"golayout/internal/api/user"
 	"golayout/pkg/httpctrl"
-	"google.golang.org/grpc"
-	"path"
+	"golayout/pkg/logger"
+	"net/http"
+
+	"golayout/internal/api/helper"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/jwtauth/v5"
 )
 
-var (
-	ctrlServer *httpctrl.Server
-	etcdCfg    *daemon.EtcdOption
-)
+func Router() http.Handler {
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
 
-func Init(s *httpctrl.Server, etcdConfig *daemon.EtcdOption) error {
-	etcdCfg = etcdConfig
-	etcd.Init(etcdConfig.Endpoints)
-	if s == nil { //for test usage
-		return nil
-	}
-	return s.RoutersRegister("v1", []httpctrl.Router{
-		{Method: "GET", Path: "/version", Handler: Version, Doc: VersionDoc},
-		{Method: "GET", Path: "/doc", Handler: Doc, Doc: nil},
+	r.Use(middleware.RequestID)
+	r.Use(logger.NewStructuredLogger())
+	r.Use(middleware.Recoverer)
+	r.Use(httpctrl.SetResponseHeader) //set reqID in header
+
+	// Protected routes
+	r.Group(func(r chi.Router) {
+		// Seek, verify and validate JWT tokens
+		r.Use(jwtauth.Verifier(helper.GetJWTAuth()))
+
+		// Handle valid / invalid tokens. In this example, we use
+		// the provided authenticator middleware, but you can write your
+		// own very easily, look at the Authenticator method in jwtauth.go
+		// and tweak it, its not scary.
+		r.Use(jwtauth.Authenticator)
+
+		r.Route("/v1", func(r chi.Router) {
+		})
 	})
-}
 
-const (
-	serviceMonitor = "monitor"
-)
+	// Public routes
+	r.Group(func(r chi.Router) {
 
-func getServiceConnection(service string) (*grpc.ClientConn, error) {
-	var err error
-	lb, err := etcd.NewLoadBalancer(path.Clean(etcdCfg.Key+"/"+service), etcd.RoundRobin)
-	if err != nil {
-		panic(err)
-	}
-	return etcd.DialGrpc(context.TODO(), lb, grpc.WithInsecure())
+		r.Get("/panic", func(w http.ResponseWriter, r *http.Request) {
+			panic("test")
+		})
+
+		r.Post("/login", user.Login)
+	})
+
+	return r
 }

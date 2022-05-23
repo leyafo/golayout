@@ -2,9 +2,7 @@ package httpctrl
 
 import (
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"bridgeswap/pkg/logger"
+	"golayout/pkg/logger"
 	"io"
 	"net/http"
 	"path"
@@ -12,6 +10,9 @@ import (
 	"runtime"
 	"strings"
 	"text/template"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 type HandlerDoc func() (doc, input, output string)

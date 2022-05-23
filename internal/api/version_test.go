@@ -1,8 +1,6 @@
 package api
 
 import (
-	"golayout/pkg/daemon"
-	"golayout/pkg/logger"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -10,12 +8,12 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	etcdCfg = &daemon.EtcdOption{
-		Endpoints: []string{"http://172.16.238.100:2380", "http://172.16.238.101:2380", "http://172.16.238.102:2380"},
-		Key:       "service/golayout/",
-	}
-	logger.Init(logger.NewDefaultOption(true, ""))
-	Init(nil, etcdCfg)
+	// etcdCfg = &daemon.EtcdOption{
+	// 	Endpoints: []string{"http://172.16.238.100:2380", "http://172.16.238.101:2380", "http://172.16.238.102:2380"},
+	// 	Key:       "service/golayout/",
+	// }
+	// logger.Init(logger.NewDefaultOption(true, ""))
+	// Init(nil, etcdCfg)
 	m.Run()
 }
 

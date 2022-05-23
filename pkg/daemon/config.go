@@ -1,8 +1,8 @@
 package daemon
 
 import (
-	"bridgeswap/pkg/path"
 	"fmt"
+	"golayout/pkg/path"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -20,6 +20,9 @@ func SetGlobalApiOption(opt *ApiOption) {
 }
 
 func GetGlobalApiOption() *ApiOption {
+	if globalApiOption == nil {
+		panic("globalApiOption is nil")
+	}
 	return globalApiOption
 }
 
@@ -53,6 +56,8 @@ type Log struct {
 type Server struct {
 	Listen string
 	Port   int
+	Name   string
+	Schema string
 }
 
 type EtcdOption struct {
@@ -85,6 +90,16 @@ type DatabaseOption struct {
 	Name     string
 	Host     string
 	Port     string
+}
+
+//DBString dbType is "mysql", "pg", "sqlite"
+func (dbOption DatabaseOption) DBString(dbType string) string {
+	if dbType == "mysql" {
+		return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+			dbOption.User, dbOption.Password, dbOption.Host,
+			dbOption.Port, dbOption.Name)
+	}
+	return ""
 }
 
 type OutsourceOption struct {
